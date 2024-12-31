@@ -1,0 +1,654 @@
+<!DOCTYPE html><html lang="zh" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>Debian12同步onedrive/googledrive/s3的解决方案 | Blog G</title><meta name="keywords" content="Debian12,文件同步"><meta name="author" content="G"><meta name="copyright" content="G"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#18171d"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="Debian12同步onedrive/googledrive/s3的解决方案"><meta name="application-name" content="Debian12同步onedrive/googledrive/s3的解决方案"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#18171d"><meta property="og:type" content="article"><meta property="og:title" content="Debian12同步onedrive/googledrive/s3的解决方案"><meta property="og:url" content="https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/index.html"><meta property="og:site_name" content="Blog G"><meta property="og:description" content="Debian12同步onedrive&amp;#x2F;googledrive&amp;#x2F;s3的解决方案"><meta property="og:locale" content="zh"><meta property="og:image" content="https://b2f8dfc.webp.li/2024-12-Debian-10.jpg.webp"><meta property="article:author" content="G"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://b2f8dfc.webp.li/2024-12-Debian-10.jpg.webp"><meta name="description" content="Debian12同步onedrive&amp;#x2F;googledrive&amp;#x2F;s3的解决方案"><link rel="shortcut icon" href="https://images.gm-aaa.cloud/img/2024/10/17/671089bd3bcc1.png"><link rel="canonical" href="https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-X58RZ6M8BP"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-X58RZ6M8BP');
+</script><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: {"enable":true,"ck":"3K1StGBoOrz6PWGI","LingQueMonitorID":"3K1StGBoOrz6PWGI"},
+  greetingBox: undefined,
+  twikooEnvId: 'https://twikoo.gm-aaa.cloud',
+  commentBarrageConfig:{"enable":true,"maxBarrage":1,"barrageTime":4000,"accessToken":"88f2655641ac78f0bc7ac8b5cf773a03","mailMd5":""},
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: false,
+  mainTone: undefined,
+  authorStatus: {"skills":["🤖️ 数码科技爱好者","🏃 脚踏实地行动派","🧱 努力搬砖打工人"]},
+  algolia: {"appId":"9ZNUXJPEQF","apiKey":"325dcfe9a78f7c8459410ad88ce58079","indexName":"hexo","hits":{"per_page":6},"languages":{"input_placeholder":"输入关键词后按下回车查找","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: G","link":"链接: ","source":"来源: Blog G","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Blog G',
+  title: 'Debian12同步onedrive/googledrive/s3的解决方案',
+  postAI: '',
+  pageFillDescription: 'Debian12同步onedrivex2Fgoogledrivex2Fs3的解决方案, 写在前面, 不支持文件夹同步的网盘, 百度网盘, 夸克网盘, 在国内使用不方便的网盘, , , , 对象存储, rclone是什么？, 核心功能, 主要用途, 技术特点, 使用场景, 使用方式, 安装, 配置, 挂载, 同步, 结尾同步的解决方案写在前面上对于网盘同步的这个功能相应的平台支持一直都比不上因为即便在服务器领域有着夸张的市场占有率但在桌面端依旧是王者级别之前使用了一段时间的桌面端由于写项目时总是有数据备份焦虑除了偶尔手动局域网内通过备份文件夹内容到网关上的总想着在某个网盘再备份一份经过了一段时间的探索总结出以下几个网盘不支持文件夹同步的网盘百度网盘不得不说百度网盘的客户端还是很简约的少去了上的弹窗广告开机自启动的但同样也少去了上的文件夹同步功能这就很难受夸克网盘官网并没有对平台的客户端就更不用说文件同步功能了在国内使用不方便的网盘谷歌的云端硬盘在上的使用体验简直是绝佳的个人感觉是除了原生支持的之外最好的网盘但因为众所周知的原因使用会有一些门槛并且在上也和桌面进行了集成优点生态成熟能够和谷歌相册深度集成支持的其他平台多等多个平台都能够导入的文件进行操作在各个操作系统上功能都比较完善免费能够满足日常的文档代码同步缺点国内使用需要魔法这个网盘的体验是很不错的几乎全平台都支持同步功能及其强大虽说上有一些小但是并不影响正常使用缺点免费空间只有要想满足日常使用价格上还是有些贵的同正常使用需要一定门槛和深度集成相信大部分人就算没使用过也听说过它但有一点我至今都不是很明白的网页版为什么无法使用但是桌面端只要登录上去之后却能够很丝滑地同步呢这样做的原因又是什么这就很奇怪在上的客户端为命令行形式让人感到很难受的是有点搞不懂命令行的一些参数按照默认设置挂载的话它会把你网盘的所有东西全下载到本地而不是像上只在本地保留一个索引或者缩略图需要用到时再进行下载折腾了半天也没搞明白有些参数的含义所以放弃了对象存储国内的云服务商比如阿里腾讯七牛提供的服务大多都是流量计费的但是毕竟这么做对于个人来说充满了不确定性万一哪天被人刷了流量可就得不偿失了所以排除国内的云服务商发现赛博活佛提供的对象存储服务很不错免费额度存储空间每月类操作每月万次类操作每月万次操作通俗一点指的是对存储桶的写操作而操作就是读并且完美兼容亚马逊的对象存储这对我这种开始学习写博客的个人玩家可是非常友好顺带也将图床一步步从上的搬到再搬到关于图床的解决方案等以后有时间再分享这次主要还是探讨一下这些云端存储服务在上的一些操作是什么通俗一点来说只要它支持的网盘都能够挂载到本地并且能够控制是下载至本地缓存或者仅仅本地保留索引并且能够通过的定时任务将需要进行同步的文件夹定时同步完美满足我的需求下面有请选手发言是一个功能强大开源使用语言开发的命令行工具主要用于云存储管理和数据传输以下是它的主要特点核心功能管理云存储上的文件在不同云存储服务之间同步和传输数据支持超过种云存储产品包括对象存储商业和消费者文件存储服务提供类似命令的操作如等主要用途将文件备份和加密到云存储从云存储还原和解密文件在不同云服务之间镜像数据在云存储供应商之间迁移数据将云存储挂载为本地磁盘技术特点保留文件时间戳自动验证校验和支持断点续传支持服务器端传输提供加密压缩分块等功能支持和系统使用场景文件传输和备份多云存储服务管理数据同步和迁移云存储系统挂载使用方式安装终端直接安装就配置配置是比较麻烦的一点在安装好之后进行交互配置第一次使用需要一个输入紧接着会让你输入一个名称起一个好记的名字就行然后会让你选择一个具体云端存储产品输入对应产品的序号回车即可接下来的操作会有所不同不过大致的思路都是一致的这里拿举例和都不填直接回车这里选择注册产品时的地域这里我选择下面的和都选择默认直接回车仅接着会弹出浏览器的对话正常登录即可登录好之后就算配置完成了需要注意的是配置的存储桶时需要准备好密钥和密钥的第一步选择的提供商选择后续大致步骤都一致挂载挂载比较简单配置远程存储的名字要挂载在本地的文件夹路径比如的意思是在后台以守护进程形式进行这样挂载会将远程存储索引至本地需要浏览时再下载至本地缓存当在文件夹内添加内容时会上传至对应的远程存储对于缓存的配置参数我并没有花过多的时间去研究有兴趣的朋友可以自行研究一下需要注意的是挂载时需要加上存储桶的名字配置远程存储的名字存储桶的名字要挂载在本地的文件夹路径同步本地需要同步的文件夹远程存储的名字和本地文件夹对应的远程文件夹路径的意思是将同步的过程进行输出遇见问题方便调试比如项目项目执行这个命令只会同步一次要想实现自动化还需要脚本和定时任务的配合将先前的同步命令编辑到一个结尾的文件中项目项目然后使用定时任务编辑定时任务在定时任务中加入这里设置的是每半个小时执行一次同步顺带还能保留一个日志结尾在折腾的过程中发现现在互联网上好多的中文内容都已经过时比如搜索一个中文的技术问题往往排在前面的都是掘金等等这种社区的博客内容内容质量堪忧想要解决问题还得花大量时间在内容筛选上还是好好学习英语吧英文论坛的质量还是很高的不管什么项目官方文档一般第一个支持的语言就是英文加油共勉',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-06 22:53:53',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/header.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" href="https://Gm-aaa.github.io" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/671089bd3bcc1.png" alt="博客"/><span class="back-menu-item-text">博客</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://images.gm-aaa.cloud" title="图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/671081f6d25ae.ico" alt="图床"/><span class="back-menu-item-text">图床</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://gm-aaa.cloud" title="监控"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108993488dc.png" alt="监控"/><span class="back-menu-item-text">监控</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" href="https://Gm-aaa.github.io/404.html" title="AI-agent"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="AI-agent"/><span class="back-menu-item-text">AI-agent</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">Blog G</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a><div id="he-plugin-simple"></div><script>var WIDGET = {
+  "CONFIG": {
+    "modules": "0124",
+    "background": "2",
+    "tmpColor": "FFFFFF",
+    "tmpSize": "16",
+    "cityColor": "FFFFFF",
+    "citySize": "16",
+    "aqiColor": "E8D87B",
+    "aqiSize": "16",
+    "weatherIconSize": "24",
+    "alertIconSize": "18",
+    "padding": "10px 10px 10px 10px",
+    "shadow": "0",
+    "language": "auto",
+    "borderRadius": "20",
+    "fixed": "true",
+    "vertical": "top",
+    "horizontal": "left",
+    "left": "20",
+    "top": "7.1",
+    "key": "df245676fb434a0691ead1c63341cd94"
+  }
+}
+</script><link rel="stylesheet" href="https://widget.qweather.net/simple/static/css/he-simple.css?v=1.4.0"/><script src="https://widget.qweather.net/simple/static/js/he-simple.js?v=1.4.0"></script></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 所有文章</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://images.gm-aaa.cloud/img/2024/10/17/67108b87c6ae3.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://images.gm-aaa.cloud/img/2024/10/17/67108b87c6ae3.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://images.gm-aaa.cloud/img/2024/10/17/67108b75951a4.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://images.gm-aaa.cloud/img/2024/10/17/67108b75951a4.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 1.05rem;">Docker<sup>1</sup></a><a href="/tags/GNU-Linux/" style="font-size: 1.05rem;">GNU/Linux<sup>1</sup></a><a href="/tags/IDEA/" style="font-size: 1.05rem;">IDEA<sup>1</sup></a><a href="/tags/Nacos/" style="font-size: 1.05rem;">Nacos<sup>1</sup></a><a href="/tags/RocketMQ/" style="font-size: 1.05rem;">RocketMQ<sup>2</sup></a><a href="/tags/Windows/" style="font-size: 1.05rem;">Windows<sup>1</sup></a><a href="/tags/sentinel/" style="font-size: 1.05rem;">sentinel<sup>1</sup></a><a href="/tags/%E7%A1%AC%E4%BB%B6/" style="font-size: 1.05rem;">硬件<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 1.05rem;">网络<sup>1</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/12/"><span class="card-archive-list-date">December 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/11/"><span class="card-archive-list-date">November 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">3</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">October 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">4</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item on" id="consoleCommentBarrage" onclick="anzhiyu.switchCommentBarrage()" title="热评开关"><a class="commentBarrage"><i class="anzhiyufont anzhiyu-icon-message"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url">运维</a><i class="anzhiyufont anzhiyu-icon-angle-right post-meta-separator"></i><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/Debian/" itemprop="url">Debian</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/GNU-Linux/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>GNU/Linux</span></a></span></div></div><h1 class="post-title" itemprop="name headline">Debian12同步onedrive/googledrive/s3的解决方案</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2024-12-06T04:57:28.000Z" title="发表于 2024-12-06 12:57:28">2024-12-06</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2024-12-06T14:53:53.000Z" title="更新于 2024-12-06 22:53:53">2024-12-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">2.2k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator"></span><span id="" data-flag-title="Debian12同步onedrive/googledrive/s3的解决方案"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="twikoo_visitors" title="访问量"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为陕西"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>陕西</span><span class="post-meta-separator"></span><span class="post-meta-commentcount"><i class="anzhiyufont anzhiyu-icon-comments post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#post-comment" tabindex="-1"><span id="twikoo-count"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></a></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://b2f8dfc.webp.li/2024-12-Debian-10.jpg.webp"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"><header><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/" itemprop="url">运维</a><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/Debian/" itemprop="url">Debian</a><a href="/tags/GNU-Linux/" tabindex="-1" itemprop="url">GNU/Linux</a><h1 id="CrawlerTitle" itemprop="name headline">Debian12同步onedrive/googledrive/s3的解决方案</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">G</span><time itemprop="dateCreated datePublished" datetime="2024-12-06T04:57:28.000Z" title="发表于 2024-12-06 12:57:28">2024-12-06</time><time itemprop="dateCreated datePublished" datetime="2024-12-06T14:53:53.000Z" title="更新于 2024-12-06 22:53:53">2024-12-06</time></header><h1 id="Debian12同步onedrive-googledrive-s3的解决方案"><a href="#Debian12同步onedrive-googledrive-s3的解决方案" class="headerlink" title="Debian12同步onedrive&#x2F;googledrive&#x2F;s3的解决方案"></a>Debian12同步onedrive&#x2F;googledrive&#x2F;s3的解决方案</h1><hr>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>linux上对于网盘同步的这个功能，相应的平台支持一直都比不上windows。因为即便Linux在服务器领域有着夸张的市场占有率，但在桌面端，windows依旧是王者级别。</p>
+<p>之前使用了一段时间的Ubuntu24.04LTS桌面端，由于写项目时，总是有数据备份焦虑。除了偶尔手动局域网内通过samba备份文件夹内容到网关上的HDD，总想着在某个网盘再备份一份。</p>
+<p>经过了一段时间的探索，总结出以下几个网盘：</p>
+<h2 id="不支持文件夹同步的网盘"><a href="#不支持文件夹同步的网盘" class="headerlink" title="不支持文件夹同步的网盘"></a>不支持文件夹同步的网盘</h2><h3 id="百度网盘"><a href="#百度网盘" class="headerlink" title="百度网盘"></a>百度网盘</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206131621257.png" alt="image-20241206131621257"></p>
+<p>不得不说，百度网盘的linux客户端还是很简约的，少去了windows上的弹窗广告、开机自启动的agent…<strong>但同样也少去了windows上的文件夹同步功能</strong>。这就很难受。</p>
+<h3 id="夸克网盘"><a href="#夸克网盘" class="headerlink" title="夸克网盘"></a>夸克网盘</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206133728446.png" alt="image-20241206133728446"></p>
+<p>官网并没有对Linux平台的客户端，就更不用说文件同步功能了。</p>
+<h2 id="在国内使用不方便的网盘"><a href="#在国内使用不方便的网盘" class="headerlink" title="在国内使用不方便的网盘"></a>在国内使用不方便的网盘</h2><h3 id="GoogleDrive"><a href="#GoogleDrive" class="headerlink" title="GoogleDrive"></a><a target="_blank" rel="noopener" href="https://workspace.google.com/products/drive/">GoogleDrive</a></h3><p>谷歌的云端硬盘在windows上的使用体验简直是绝佳的，个人感觉是除了windows原生支持的onedrive之外，最好的网盘。但因为众所周知的原因，使用会有一些门槛。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206212805471.png" alt="image-20241206212805471"></p>
+<p>并且在linux上也和Gnome桌面进行了集成。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-gnome-google-drive.png"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-google-drive-mounted-gnome-linux.png"></p>
+<p>优点：</p>
+<ol>
+<li>生态成熟，能够和谷歌相册、workspace深度集成</li>
+<li>支持的其他平台多，openai、notion等多个平台都能够导入googledrive的文件进行操作</li>
+<li>在各个操作系统上，功能都比较完善</li>
+<li>免费15G能够满足日常的文档、代码同步</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>国内使用需要魔法</li>
+</ol>
+<h3 id="DropBox"><a href="#DropBox" class="headerlink" title="DropBox"></a><a target="_blank" rel="noopener" href="https://www.dropbox.com/">DropBox</a></h3><p>这个网盘的体验是很不错的，Android、Linux、windows、IOS、MAC几乎全平台都支持同步功能，及其强大。虽说Linux上有一些小BUG，但是并不影响正常使用。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206210656668.png" alt="image-20241206210656668"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206212725669.png" alt="image-20241206212725669"></p>
+<p>缺点：</p>
+<ol>
+<li><p>免费空间只有2G，要想满足日常使用，价格上还是有些贵的。</p>
+</li>
+<li><p>同GoogleDrive，正常使用需要一定门槛</p>
+</li>
+</ol>
+<h3 id="OneDrive"><a href="#OneDrive" class="headerlink" title="OneDrive"></a><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage">OneDrive</a></h3><p>onedrive和windows深度集成，相信大部分人就算没使用过也听说过它 。但有一点我至今都不是很明白：</p>
+<p>onedrive的网页版为什么无法使用，但是桌面端只要登录上去之后，却能够很丝滑地同步呢？这样做的原因又是什么？这就很奇怪</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206212541955.png"></p>
+<p>onedrive在linux上的客户端为命令行形式，让人感到很难受的是，有点搞不懂命令行的一些参数，按照默认设置挂载的话，它会把你网盘的所有东西全下载到本地，而不是像windows上只在本地保留一个索引或者缩略图，需要用到时再进行下载。</p>
+<p>折腾了半天也没搞明白有些参数的含义，所以放弃了。</p>
+<h2 id="对象存储"><a href="#对象存储" class="headerlink" title="对象存储"></a>对象存储</h2><p>国内的云服务商比如阿里、腾讯、七牛提供的OOS服务大多都是流量计费的，但是毕竟这么做对于个人来说充满了不确定性。</p>
+<p>万一哪天被人刷了流量，可就得不偿失了。</p>
+<p>所以排除国内的云服务商，发现赛博活佛<strong>cloudflare提供的R2对象存储服务</strong>很不错。</p>
+<p>免费额度：</p>
+<ol>
+<li>存储空间：每月10GB</li>
+<li>A类操作：每月100万次</li>
+<li>B类操作：每月1000万次</li>
+</ol>
+<p>A操作通俗一点指的是对存储桶的写操作，而B操作就是读;并且完美兼容亚马逊的s3对象存储。</p>
+<p>这对我这种开始学习写博客的个人玩家可是非常友好，顺带也将图床一步步从vps上的lsky搬到github，再搬到cloudflare。关于图床的解决方案等以后有时间再分享。这次主要还是探讨一下这些云端存储服务在Linux上的一些操作。</p>
+<h2 id="rclone是什么？"><a href="#rclone是什么？" class="headerlink" title="rclone是什么？"></a>rclone是什么？</h2><p>通俗一点来说，只要它支持的网盘，都能够挂载到本地，并且能够控制是下载至本地缓存，或者仅仅本地保留索引。并且能够通过Linux的cron定时任务将需要进行同步的文件夹定时同步，完美满足我的需求。下面有请perplexity.ai选手发言：</p>
+<p>Rclone是一个功能强大、开源、使用go语言开发的命令行工具，主要用于云存储管理和数据传输。以下是它的主要特点：</p>
+<h3 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h3><ul>
+<li>管理云存储上的文件</li>
+<li>在不同云存储服务之间同步和传输数据</li>
+<li>支持超过40种云存储产品，包括S3对象存储、商业和消费者文件存储服务</li>
+<li>提供类似unix命令的操作，如rsync、cp、mv、mount等</li>
+</ul>
+<h3 id="主要用途"><a href="#主要用途" class="headerlink" title="主要用途"></a>主要用途</h3><ul>
+<li>将文件备份（和加密）到云存储</li>
+<li>从云存储还原（和解密）文件</li>
+<li>在不同云服务之间镜像数据</li>
+<li>在云存储供应商之间迁移数据</li>
+<li>将云存储挂载为本地磁盘</li>
+</ul>
+<h3 id="技术特点"><a href="#技术特点" class="headerlink" title="技术特点"></a>技术特点</h3><ul>
+<li><p>保留文件时间戳</p>
+</li>
+<li><p>自动验证校验和</p>
+</li>
+<li><p>支持断点续传</p>
+</li>
+<li><p>支持服务器端传输</p>
+</li>
+<li><p>提供加密、压缩、分块等功能</p>
+</li>
+<li><p>支持Windows、macOS、Linux和FreeBSD系统</p>
+<p>1</p>
+</li>
+</ul>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ul>
+<li>文件传输和备份</li>
+<li>多云存储服务管理</li>
+<li>数据同步和迁移</li>
+<li>云存储系统挂载</li>
+</ul>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>终端直接安装就OK</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt install </span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>配置是比较麻烦的一点，在安装好之后，进行交互配置</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rclone config</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206215938215.png" alt="image-20241206215938215"></p>
+<p>第一次使用需要new一个remote，输入n，紧接着会让你输入一个名称，起一个好记的名字就行。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206220335521.png" alt="image-20241206220335521"></p>
+<p>然后，会让你选择一个具体云端存储产品，输入对应产品的序号回车即可</p>
+<p>接下来的操作会有所不同，不过大致的思路都是一致的</p>
+<p>这里拿onedrive举例</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206220626150.png" alt="image-20241206220626150"></p>
+<p>client_id和client_secret都不填，直接回车，这里选择注册产品时的地域。这里我选择global</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206221105661.png" alt="image-20241206221105661"></p>
+<p>下面的advanced config和 auto config都选择默认，直接回车，仅接着会弹出浏览器的对话</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-image-20241206221259564.png" alt="image-20241206221259564"></p>
+<p>正常登录即可。登录好之后就算配置完成了。</p>
+<p>需要注意的是，配置cloudflare的R2存储桶时需要准备好密钥id和密钥的key，第一步选择amazone的s3，提供商选择cloudflare，后续大致步骤都一致。</p>
+<h3 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h3><p>挂载比较简单</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rclone mount &lt;配置远程存储的名字&gt;: &lt;要挂载在本地的文件夹路径&gt; --daemon</span><br></pre></td></tr></table></figure>
+
+<p>比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rclone mount google_drive: ~/google_drive/ --daemon</span><br></pre></td></tr></table></figure>
+
+
+
+<p>–daemon的意思是在后台以守护进程形式进行</p>
+<p>这样挂载会将远程存储索引至本地，需要浏览时再下载至本地缓存。当在文件夹内添加内容时，会上传至对应的远程存储。对于缓存的配置参数，我并没有花过多的时间去研究，有兴趣的朋友可以自行研究一下。</p>
+<p>需要注意的是，挂载r2时，需要加上存储桶的名字。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rclone mount &lt;配置远程存储的名字&gt;:&lt;存储桶的名字&gt; &lt;要挂载在本地的文件夹路径&gt; --daemon</span><br></pre></td></tr></table></figure>
+
+<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rclone sync &lt;本地需要同步的文件夹&gt; &lt;远程存储的名字&gt;:&lt;和本地文件夹对应的远程文件夹路径&gt;  --progress</span><br></pre></td></tr></table></figure>
+
+<p>–progress的意思是将同步的过程进行输出，遇见问题方便调试</p>
+<p>比如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rclone sync /home/g/OneDrive/项目 onedrive:项目  --progress</span><br></pre></td></tr></table></figure>
+
+<p>执行这个命令，只会同步一次，要想实现自动化，还需要shell脚本和定时任务的配合</p>
+<p>将先前的同步命令编辑到一个.sh结尾的文件中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rclone sync /home/g/OneDrive/项目 onedrive:项目  --progress</span><br><span class="line">echo &quot;OK&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用定时任务</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">crontab -e # 编辑定时任务</span><br></pre></td></tr></table></figure>
+
+<p>在定时任务中加入</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">*/30 * * * * sh /home/g/desktop/rclone-onedrive.sh &gt;&gt; /home/g/desktop/onedrive.log</span><br></pre></td></tr></table></figure>
+
+<p>这里设置的是每i半个小时执行一次同步，顺带还能保留一个日志</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>在折腾的过程中，发现现在互联网上好多的中文内容都已经过时。比如搜索一个中文的技术问题，往往排在前面的都是CSDN、掘金等等这种社区的博客内容，内容质量堪忧。想要解决问题还得花大量时间在内容筛选上。还是好好学习英语吧，英文论坛的质量还是很高的，不管什么项目，官方文档一般第一个支持的语言就是英文。加油！共勉。</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108a1a981bc.png" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108a1a981bc.png" title="头像" alt="头像"></a><div class="post-copyright__author_name">G</div><div class="post-copyright__author_desc">🤤又多活了一天</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/')">Debian12同步onedrive/googledrive/s3的解决方案</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="https://images.gm-aaa.cloud/img/2024/10/17/67108b87c6ae3.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108b87c6ae3.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://images.gm-aaa.cloud/img/2024/10/17/67108b75951a4.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108b75951a4.png" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="https://gm-aaa.github.io/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://Gm-aaa.github.io" target="_blank">Blog G</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E8%BF%90%E7%BB%B4/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>运维<span class="categoryesPageCount">3</span></a><a class="post-meta__box__categoryes" href="/categories/%E8%BF%90%E7%BB%B4/Debian/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>Debian<span class="categoryesPageCount">1</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/GNU-Linux/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>GNU/Linux<span class="tagsPageCount">1</span></a></div></div><div class="post_share"><div class="social-share" data-image="https://b2f8dfc.webp.li/2024-12-封面图-科学上网720p.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"/><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer="defer"></script></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/12/05/e5-2666v3%E8%A3%85%E6%9C%BA%E4%BD%93%E9%AA%8C/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-s-l1200.jpg.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">e5_2666v3装机体验</div></div></a></div><div class="next-post pull-right"><a href="/2024/12/29/%E9%85%8D%E7%BD%AE%E7%9C%9F%E6%AD%A3%E7%9A%84%E2%80%9C%E7%A7%91%E5%AD%A6%E2%80%9D%E4%B8%8A%E7%BD%91%E7%8E%AF%E5%A2%83/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-封面图-科学上网720p.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">配置真正的“科学”上网环境</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div><div class="comment-tips" id="comment-tips"><span>✅ 你无需删除空行，直接评论以获取最佳展示效果</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108a1a981bc.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://bu.dusays.com/2023/08/24/64e6ce9c507bb.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:red;font-seiz:20px;font-weight:bold">“像会永生那样去学习，像明天就要死亡那样去生活。”<br>——圣雄甘地</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);font-size:16px;font-weight:bold""><br>&nbsp&nbsp欢迎来到我的Blog！</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">G</h1><div class="author-info__desc">🤤又多活了一天</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/Gm-aaa" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="social-icon faa-parent animated-hover" href="https://space.bilibili.com/435430739" target="_blank" title="BiliBili"><i class="anzhiyufont anzhiyu-icon-bilibili"></i></a></div></div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.</span> <span class="toc-text">Debian12同步onedrive&#x2F;googledrive&#x2F;s3的解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E6%94%AF%E6%8C%81%E6%96%87%E4%BB%B6%E5%A4%B9%E5%90%8C%E6%AD%A5%E7%9A%84%E7%BD%91%E7%9B%98"><span class="toc-number">1.2.</span> <span class="toc-text">不支持文件夹同步的网盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">百度网盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B8%E5%85%8B%E7%BD%91%E7%9B%98"><span class="toc-number">1.2.2.</span> <span class="toc-text">夸克网盘</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8%E5%9B%BD%E5%86%85%E4%BD%BF%E7%94%A8%E4%B8%8D%E6%96%B9%E4%BE%BF%E7%9A%84%E7%BD%91%E7%9B%98"><span class="toc-number">1.3.</span> <span class="toc-text">在国内使用不方便的网盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GoogleDrive"><span class="toc-number">1.3.1.</span> <span class="toc-text">GoogleDrive</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DropBox"><span class="toc-number">1.3.2.</span> <span class="toc-text">DropBox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OneDrive"><span class="toc-number">1.3.3.</span> <span class="toc-text">OneDrive</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8"><span class="toc-number">1.4.</span> <span class="toc-text">对象存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rclone%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.5.</span> <span class="toc-text">rclone是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD"><span class="toc-number">1.5.1.</span> <span class="toc-text">核心功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%94%A8%E9%80%94"><span class="toc-number">1.5.2.</span> <span class="toc-text">主要用途</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E7%89%B9%E7%82%B9"><span class="toc-number">1.5.3.</span> <span class="toc-text">技术特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.4.</span> <span class="toc-text">使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.6.</span> <span class="toc-text">使用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.6.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%82%E8%BD%BD"><span class="toc-number">1.6.3.</span> <span class="toc-text">挂载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5"><span class="toc-number">1.6.4.</span> <span class="toc-text">同步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%B0%BE"><span class="toc-number">1.7.</span> <span class="toc-text">结尾</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/29/%E9%85%8D%E7%BD%AE%E7%9C%9F%E6%AD%A3%E7%9A%84%E2%80%9C%E7%A7%91%E5%AD%A6%E2%80%9D%E4%B8%8A%E7%BD%91%E7%8E%AF%E5%A2%83/" title="配置真正的“科学”上网环境"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-封面图-科学上网720p.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="配置真正的“科学”上网环境"/></a><div class="content"><a class="title" href="/2024/12/29/%E9%85%8D%E7%BD%AE%E7%9C%9F%E6%AD%A3%E7%9A%84%E2%80%9C%E7%A7%91%E5%AD%A6%E2%80%9D%E4%B8%8A%E7%BD%91%E7%8E%AF%E5%A2%83/" title="配置真正的“科学”上网环境">配置真正的“科学”上网环境</a><time datetime="2024-12-29T02:25:09.000Z" title="发表于 2024-12-29 10:25:09">2024-12-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Debian12同步onedrive/googledrive/s3的解决方案"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-Debian-10.jpg.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Debian12同步onedrive/googledrive/s3的解决方案"/></a><div class="content"><a class="title" href="/2024/12/06/Debian12%E5%90%8C%E6%AD%A5onedrive-googledrive-s3%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" title="Debian12同步onedrive/googledrive/s3的解决方案">Debian12同步onedrive/googledrive/s3的解决方案</a><time datetime="2024-12-06T04:57:28.000Z" title="发表于 2024-12-06 12:57:28">2024-12-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/05/e5-2666v3%E8%A3%85%E6%9C%BA%E4%BD%93%E9%AA%8C/" title="e5_2666v3装机体验"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://b2f8dfc.webp.li/2024-12-s-l1200.jpg.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="e5_2666v3装机体验"/></a><div class="content"><a class="title" href="/2024/12/05/e5-2666v3%E8%A3%85%E6%9C%BA%E4%BD%93%E9%AA%8C/" title="e5_2666v3装机体验">e5_2666v3装机体验</a><time datetime="2024-12-05T04:53:57.000Z" title="发表于 2024-12-05 12:53:57">2024-12-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/18/IDEA%E6%BF%80%E6%B4%BB%E6%AD%A5%E9%AA%A4/" title="IDEA激活步骤"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/11/18/673b2bb2cc1e7.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="IDEA激活步骤"/></a><div class="content"><a class="title" href="/2024/11/18/IDEA%E6%BF%80%E6%B4%BB%E6%AD%A5%E9%AA%A4/" title="IDEA激活步骤">IDEA激活步骤</a><time datetime="2024-11-18T11:56:59.000Z" title="发表于 2024-11-18 19:56:59">2024-11-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/18/SpringCloudAlibaba%E4%B9%8BSentinel%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="SpringCloudAlibaba之Sentinel流量控制"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/11/18/673abfcbcdc80.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SpringCloudAlibaba之Sentinel流量控制"/></a><div class="content"><a class="title" href="/2024/11/18/SpringCloudAlibaba%E4%B9%8BSentinel%E6%B5%81%E9%87%8F%E6%8E%A7%E5%88%B6/" title="SpringCloudAlibaba之Sentinel流量控制">SpringCloudAlibaba之Sentinel流量控制</a><time datetime="2024-11-18T04:43:14.000Z" title="发表于 2024-11-18 12:43:14">2024-11-18</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://blog.anheyu.com/" style="margin-inline:5px" data-title="本站使用AnZhiYu主题" title="本站使用AnZhiYu主题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.9/img/Theme-AnZhiYu-2E67D3.svg" alt="本站使用AnZhiYu主题"/></a><a class="github-badge" target="_blank" href="https://www.algolia.com/" style="margin-inline:5px" data-title="本站由algolia提供搜索服务" title="本站由algolia提供搜索服务"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/algolia-search-blue?style=flat-square&amp;logo=algolia&amp;logoColor=003dff" alt="本站由algolia提供搜索服务"/></a><a class="github-badge" target="_blank" href="https://www.cloudflare.com/zh-cn/" style="margin-inline:5px" data-title="本站由Cloudflare-R2提供图床服务" title="本站由Cloudflare-R2提供图床服务"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/cloudflare-R2-blue?style=flat-square&amp;logo=cloudflare&amp;logoColor=f6821f" alt="本站由Cloudflare-R2提供图床服务"/></a><a class="github-badge" target="_blank" href="https://github.com/Gm-aaa" style="margin-inline:5px" data-title="我的Github" title="我的Github"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/GitHub-Gm--aaa-blue?style=flat-square&amp;logo=GitHub&amp;logoColor=222222" alt="我的Github"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2024 - 2025 By <a class="footer-bar-link" href="/" title="G" target="_blank">G</a></div></div><div id="footer-type-tips"></div></div><div class="footer-bar-right"><a class="footer-bar-link" target="_blank" rel="noopener" href="https://github.com/anzhiyu-c/hexo-theme-anzhiyu" title="主题">主题</a></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">10</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" href="https://Gm-aaa.github.io" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/671089bd3bcc1.png" alt="博客"/><span class="back-menu-item-text">博客</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://images.gm-aaa.cloud" title="图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/671081f6d25ae.ico" alt="图床"/><span class="back-menu-item-text">图床</span></a><a class="back-menu-item" target="_blank" rel="noopener" href="https://gm-aaa.cloud" title="监控"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://images.gm-aaa.cloud/img/2024/10/17/67108993488dc.png" alt="监控"/><span class="back-menu-item-text">监控</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" href="https://Gm-aaa.github.io/404.html" title="AI-agent"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="AI-agent"/><span class="back-menu-item-text">AI-agent</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 所有文章</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/Docker/" style="font-size: 0.88rem;">Docker<sup>1</sup></a><a href="/tags/GNU-Linux/" style="font-size: 0.88rem;">GNU/Linux<sup>1</sup></a><a href="/tags/IDEA/" style="font-size: 0.88rem;">IDEA<sup>1</sup></a><a href="/tags/Nacos/" style="font-size: 0.88rem;">Nacos<sup>1</sup></a><a href="/tags/RocketMQ/" style="font-size: 0.88rem;">RocketMQ<sup>2</sup></a><a href="/tags/Windows/" style="font-size: 0.88rem;">Windows<sup>1</sup></a><a href="/tags/sentinel/" style="font-size: 0.88rem;">sentinel<sup>1</sup></a><a href="/tags/%E7%A1%AC%E4%BB%B6/" style="font-size: 0.88rem;">硬件<sup>1</sup></a><a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 0.88rem;">网络<sup>1</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><a id="switch-commentBarrage" href="javascript:anzhiyu.switchCommentBarrage();" title="开关弹幕"><i class="anzhiyufont anzhiyu-icon-danmu"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.cbd.int/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("10/14/2024 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      if (img != null) {
+        img.src = "https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-下班啦.svg";
+        img.title = "下班了就该开开心心的玩耍，嘿嘿~";
+        img.alt = "下班了就该开开心心的玩耍，嘿嘿~";
+      }
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><script src="https://cdn.cbd.int/algoliasearch@4.18.0/dist/algoliasearch-lite.umd.js"></script><script src="https://cdn.cbd.int/instantsearch.js@4.60.0/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script>(() => {
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo.gm-aaa.cloud',
+      region: '',
+      onCommentLoaded: () => {
+        anzhiyu.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') setTimeout(runFn,0)
+    else getScript('https://cdn.cbd.int/twikoo@1.6.39/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo.gm-aaa.cloud',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  const runFn = () => {
+    init();
+    GLOBAL_CONFIG_SITE.isPost && getCount()
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) anzhiyu.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else {
+      loadTwikoo()
+    }
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"><script async src="/js/anzhiyu/comment_barrage.js"></script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo.gm-aaa.cloud',
+        region: '',
+        pageSize: 6,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://cdn.cbd.int/twikoo@1.6.39/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'><div class='name'><span>${array[i].nick} </span></div></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom && ($dom.innerHTML= result)
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script async data-pjax src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.1/bubble/bubble.js"></script><script>var visitorMail = "";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/fireworks.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:type\"]","meta[property=\"og:site_name\"]","meta[property=\"og:description\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/about/"]):not([href="/essay/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: true,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', 'G-X58RZ6M8BP', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="https://busuanzi.icodeq.com/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
